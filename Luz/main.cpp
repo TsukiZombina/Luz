@@ -35,7 +35,7 @@ int main()
 	glfwMakeContextCurrent(window);
 
 	glfwSetKeyCallback(window, key_callback);
-	//glfwSetCursorPosCallback(window, cursor_pos_callback);
+	glfwSetCursorPosCallback(window, cursor_pos_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glewExperimental = GL_TRUE;
@@ -145,8 +145,11 @@ int main()
 		GLfloat radius = 2.0f;
 		Vector3D<GLfloat> diffuseLight(radius * sinf(glfwGetTime()), radius * cosf(glfwGetTime()), 2.0f);
 
+		Vector3D<GLfloat> diffuseLight(radius * sinf(glfwGetTime()), radius * cosf(glfwGetTime()), 2.0f);
+
 		glUniform4f(glGetUniformLocation(shaderProgram, "diffuseLightPosition"), diffuseLight(0), diffuseLight(1), diffuseLight(2), 1.0);
-		
+		glUniform4f(glGetUniformLocation(shaderProgram, "spacularLightPosition"), diffuseLight(0), diffuseLight(1), diffuseLight(2), 1.0);
+
 		model.Identity();
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_TRUE, model.GetArray());
 		modelViewProjection = projection * (view * model);
