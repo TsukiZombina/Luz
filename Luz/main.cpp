@@ -74,7 +74,12 @@ int main()
 	SquareMatrix<GLfloat, 4> projection;
 	SquareMatrix<GLfloat, 4> modelView;
 	
-	model.Identity();
+	GLfloat m[4][4] = {20.0f, 0.0f, 0.0f, 0.0f,
+						0.0f, 20.0f, 0.0f, -0.5f,
+						0.0f, 0.0f, 20.f, 0.0f,
+						0.0f, 0.0f, 0.0f, 1.0f};
+	
+	SquareMatrix<GLfloat, 4> modelPlane(m);
 	
 	MakePerspective(45.0f, WIDTH / HEIGHT, 0.1f, 100.0f, projection);
 
@@ -145,10 +150,8 @@ int main()
 		GLfloat radius = 2.0f;
 		Vector3D<GLfloat> diffuseLight(radius * sinf(glfwGetTime()), radius * cosf(glfwGetTime()), 2.0f);
 
-		Vector3D<GLfloat> diffuseLight(radius * sinf(glfwGetTime()), radius * cosf(glfwGetTime()), 2.0f);
-
 		glUniform4f(glGetUniformLocation(shaderProgram, "diffuseLightPosition"), diffuseLight(0), diffuseLight(1), diffuseLight(2), 1.0);
-		glUniform4f(glGetUniformLocation(shaderProgram, "spacularLightPosition"), diffuseLight(0), diffuseLight(1), diffuseLight(2), 1.0);
+		glUniform4f(glGetUniformLocation(shaderProgram, "cameraPosition"), camera.position(0), camera.position(1), camera.position(2), 1.0);
 
 		model.Identity();
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_TRUE, model.GetArray());
@@ -161,9 +164,9 @@ int main()
 		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
-		model.Identity();
+		//model.Identity();
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_TRUE, model.GetArray());
-		modelViewProjection = projection * (view * model);
+		modelViewProjection = projection * (view * modelPlane);
 		location = glGetUniformLocation(shaderProgram, "modelViewProjection");
 		glUniformMatrix4fv(location, 1, GL_TRUE, modelViewProjection.GetArray());
 
@@ -173,7 +176,7 @@ int main()
 
 		glfwSwapBuffers(window);
 	}
-
+	
 	glDeleteVertexArrays(2, vao);
 	glDeleteBuffers(2, vbo);
 	glDeleteBuffers(1, &ebo);
