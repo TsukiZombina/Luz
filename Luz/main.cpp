@@ -147,8 +147,8 @@ int main()
 		// Dibuja
 		glUseProgram(shaderProgram);
 
-		GLfloat radius = 2.0f;
-		Vector3D<GLfloat> diffuseLight(radius * sinf(glfwGetTime()), radius * cosf(glfwGetTime()), 2.0f);
+		GLfloat radius = 8.0f;
+		Vector3D<GLfloat> diffuseLight(radius * sinf(glfwGetTime()), 2.0f, radius * cosf(glfwGetTime()));
 
 		glUniform4f(glGetUniformLocation(shaderProgram, "diffuseLightPosition"), diffuseLight(0), diffuseLight(1), diffuseLight(2), 1.0);
 		glUniform4f(glGetUniformLocation(shaderProgram, "cameraPosition"), camera.position(0), camera.position(1), camera.position(2), 1.0);
@@ -165,7 +165,7 @@ int main()
 		glBindVertexArray(0);
 
 		//model.Identity();
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_TRUE, model.GetArray());
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_TRUE, modelPlane.GetArray());
 		modelViewProjection = projection * (view * modelPlane);
 		location = glGetUniformLocation(shaderProgram, "modelViewProjection");
 		glUniformMatrix4fv(location, 1, GL_TRUE, modelViewProjection.GetArray());
